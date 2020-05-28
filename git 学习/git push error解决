@@ -1,0 +1,44 @@
+使用命令：
+
+touch README.md //新建说明文件
+git init //在当前项目目录中生成本地git管理,并建立一个隐藏.git目录
+// git remote add origin https://github.com/chape/test.git //添加到远程项目，别名为origin
+git add . //添加当前目录中的所有文件到索引
+git commit -m "first commit" //提交到本地源码库，并附加提交注释
+git pull --rebase origin master
+git push -u origin master //把本地源码库push到github 别名为origin的远程项目中，确认提交
+
+如果提交失败  也就是说 发生了冲突
+先手动解决冲突
+
+然后在执行
+git add .
+git rebase --continue
+git push origin master
+
+git pull --rebase用在合并代码的时候其作用就是在一个随机创建的分支上处理冲突，避免了直接污染原来的分区
+
+
+
+直接用远程覆盖本地代码
+git reset -hard origin master
+git pull
+
+隐藏代码
+1.git stash (把本地冲突的代码隐藏)
+
+2.git pull
+
+3.git stash pop  stash@{0} (将隐藏的和pull 下来的合并，打开文件，解决冲突)
+stash@{0}是你刚刚备份存储的标记
+这时候系统会提示类似以下的信息：
+Auto-merging c/environ.c
+CONFLICT (content): Merge conflict in c/environ.c
+这个提示内容意思就是系统自动合并修改的内容，但是当中会有冲突，需要解决其中的冲突。
+4.解决文件中的冲突内容
+打开上面提示的冲突文件，会看到类似的内容：
+
+其中Updated upstream和=======之间的内容是从远端pull下来的代码，=======和Stashed changes之间的内容则是你本地修改的内容。这时候，需要你修改决定留下哪些需要的内容。
+
+最后，解决完冲突，就可以正常git提交了。
+

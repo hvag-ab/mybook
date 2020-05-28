@@ -1,0 +1,404 @@
+$ git config --global user.name "Your Name"   首先设置账号和邮箱
+$ git config --global user.email "email@example.com"
+
+
+$ mkdir learngit 创建git仓库 也就是目录
+$ cd learngit 进入仓库
+$ pwd 查看仓库地址
+/Users/michael/learngit
+
+git init
+通过git init命令把这个目录变成Git可以管理的仓库：然后目录下就多了一个.git  用ls -ah命令就可以看见。
+
+$ git add readme.txt
+在仓库中创建一个文件夹例如 readme.txt
+用命令git add告诉Git，把文件添加到仓库：
+
+$ git add file1.txt
+$ git add file2.txt file3.txt
+$ git commit -m "add 3 files."
+当然 git add .添加所有文件
+
+重新更改readme.txt
+Git is a distributed version control system.
+Git is free software.
+
+git status
+git status命令可以让我们时刻掌握仓库当前的状态，上面的命令输出告诉我们，readme.txt被修改过了，但还没有准备提交的修改。
+
+Git告诉我们readme.txt被修改了，查看具体修改 需要用git diff这个命令看看：
+$ git diff readme.txt
+如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
+
+在 git add file2.txt 提交后 在执行git diff --cached 就是查看提交到缓存区的文件改动内容
+git status -s  ??表示添加的内容  A 表示已经提交到缓存区  AM表示 这个文件在我们将它添加到缓存之后又有改动。改动后我们再执行 git add 命令将其添加到缓存中
+
+
+git commit告诉Git，把文件提交到仓库：
+$ git commit -m "wrote a readme file"
+git commit命令，-m后面输入的是本次提交的说明，可以输入任意内容，当然最好是有意义的，这样你就能从历史记录里方便地找到改动记录。
+git commit -am '修改 hello.php 文件' 表示 限制性git add . 在执行git commit 两步变成一步
+
+git reflog 查看你commit pull 记录 查看各个版本号 方便hard 版本号
+$ git reset --hard 1094a
+
+首先，Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），
+上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+现在，我们要把当前版本append GPL回退到上一个版本add distributed，就可以使用git reset命令：
+每次git commit后才算一个版本
+
+现在修改readme.txt 内容
+Git is good.
+
+然后git add readme.txt
+git status -s 查看提交状态
+
+
+$ git reset HEAD readme.txt
+HEAD is now at e475afc add distributed
+
+git commit -m "重新提交"
+
+
+看看readme.txt的内容是不是版本add distributed：
+$ cat readme.txt 查看文件内容
+
+$ git reset --hard 1094a回到gpl版本 1094a就是gpl版本的代号
+HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+
+
+命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+总之，就是让这个文件回到最近一次git commit或git add时的状态。
+
+
+场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+
+场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
+
+场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。
+
+删除文件
+一般情况下，你通常直接在文件管理器中把没用的文件删了，或者用rm命令删了：
+$ rm test.txt
+git status命令会立刻告诉你哪些文件被删除了：
+现在你有两个选择，一是确实要从版本库中删除该文件，那就用命令git rm删掉，并且git commit：
+
+$ git rm test.txt ；git rm -r <文件>
+rm 'test.txt'
+
+$ git commit -m "remove test.txt"
+
+另一种情况是删错了，因为版本库里还有呢，所以可以很轻松地把误删的文件恢复到最新版本：
+
+$ git checkout -- test.txt
+git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
+
+
+
+远程仓库
+github/coding/oschina
+1.生成SSH Key:
+    打开git bash 输入ssh-keygen -t rsa -C "youremail@example.com"
+    输入 cd .ssh
+    输入 cat id_rsa.pub
+2.登陆github，添加ssh key
+
+
+创建项目并上传到远程仓库
+cd parent_dir //进入项目父目录
+mkdir gitDemo  //创建项目目录 gitDemo
+cd gitDemo   //进入项目目录
+git init  //初始化空的 git 仓库
+touch README.md
+git add README.md //这两行添加简单的 README.md 文件
+git commit -m "first commit" //提交时附加的信息
+git remote add origin https://coding.net/codingTutorial/gitDemo.git  //添加一个名为 origin 的远端（ url 为 git 地址）
+git push -u origin master //将该目录下的文件推送到远端（origin）上的 "master" 分支
+
+
+上传已有项目或更新的项目
+cd existing_git_repo //进入已有项目或更新的项目目录
+//若该项目目录未建立 git 仓库，则需用 READM.md 初始化 git 仓库，详见“创建新项目上传”
+//若有git仓库则直接添加远端仓库上传
+//如果目录下有文件没有被追踪（未与远端仓库同步），可以使用“ git add 文件名” 和 “ git commit -m "message" ”，来添加追踪文件
+git remote add origin https://coding.net/codingTutorial/gitDemo.git
+git push -u origin master //这两行将该目录下的文件推送到远端（origin）上的 "master" 分支
+
+
+克隆远程仓库
+从零开发，那么最好的方式是先创建远程库，然后，从远程库克隆。
+git clone https://coding.net/coderlt/testGit.git
+
+
+分支管理
+
+查看分支：git branch
+创建分支：git branch <name>
+创建完分支后 就切换到分支上
+切换分支：git checkout <name>
+创建+切换分支：git checkout -b <name>
+合并某分支到当前分支：git merge <name>   这个name是分支名 一般是分支名 合并 到主分支上
+删除分支：git branch -d <name>
+
+冲突处理
+创建一个分支并签出
+git checkout -b feature
+修改了feature 分支中 test文件 vim test.py   print('hvag')
+git add .
+git commit -m 't1'
+
+签出master分支
+git checkout 'master'
+修改 test文件 故意造成冲突 vim test.py print('hvag') + 333
+add & commit
+git add .
+git commit -m 'tm'
+此时合并分支时会出错 git merge feature
+报错冲突信息
+Auto-merging h.py
+CONFLICT (add/add): Merge conflict in h.py
+Automatic merge failed; fix conflicts and then commit the result.
+cat text.py 查看冲突文件
+信息如下
+<<<<<<< HEAD
+print('eee')
+=======
+print('eee') + 3333
+>>>>>>> change_site
+
+<<<<<<< your code =======   ======= other code <<<<<<<
+
+vim text.py
+修改 主或者分支 使得两个文件内容一致
+
+git add test.py
+git commit
+
+再合并 git merge feature 成功
+删除分支： git branch -d feature
+
+查看日志：
+$ git log --graph --pretty=oneline --abbrev-commit
+小结
+当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+用git log –graph命令可以看到分支合并图。
+
+分支管理策略
+开发时，master分支是主线，用于合并dev分支后发布新版本
+测试时在dev分支的基础上工作，从dev上拉分支，然后合并到dev上，再合并到master上发布
+*合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并
+
+
+$ git log 查看详细日志
+$ git log --oneline 查看简洁日志
+$ git log --oneline --before={3.weeks.ago} --after={2010-04-18} --no-merges 查看时间段日志
+$ git log --author=Linus --oneline -5
+$ git log --reverse --oneline 查看反向排列日志
+
+生成日志csv
+git log --date=iso --pretty=format:'"%h","%an","%ad","%s"' >log.csv
+
+
+
+
+
+BUG分支
+创建临时分支修复bug,修复后删除bug
+保存当前工作区
+git stash
+
+例：在dev 中新增了文件t3.txt 并 add 到了存储区
+现在有bug issue-101 要修改
+先保存工作现场： git stash
+查处工作现场： git stash list
+签出主分支master,修改bug
+git checkout master
+git checkout -b issue-101
+修改，添加，提交
+合并bug分支到master，并删除bug分支
+git merge --no-ff -m "merged bug fix 101" issue-101
+git branch -d issue-101
+回到dev分支上
+git checkout dev
+恢复工作现场
+git stash apply 恢复
+git stash drop 删除保存的工作现场
+git stash pop 恢复并删除工作现场
+恢复并删除指定的工作现场
+git stash apply stash@{0}
+git stash drop stash@{0}
+小结
+修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除；
+当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，再git stash pop，回到工作现场。
+
+功能分支 Feature
+每添加一个新功能，最好新建一个feature分支，在上面开发，完成后，合并，最后，删除该feature分支
+拉一个featur分支
+git checkout -b feature-chktype
+修改后添加、提交
+如果还没合并到dev, 删除这个feature分支时会失败
+可以使用 git branch -D 分支名 强制删除
+获取远程仓库信息
+git remote
+origin
+git remote -v 更详细的信息
+origin  https://coding.net/coderlt/testGit.git (fetch)
+origin  https://coding.net/coderlt/testGit.git (push)
+推送分支
+git push origin master
+git push origin dev
+哪些分支需要推送，哪些不需要呢？
+master分支是主分支，因此要时刻与远程同步；
+dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+
+多人协作的工作模式通常是这样：
+首先，可以试图用git push origin branch-name推送自己的修改；
+如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+如果合并有冲突，则解决冲突，并在本地提交；
+没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令git branch –set-upstream branch-name origin/branch-name。
+这就是多人协作的工作模式，一旦熟悉了，就非常简单。
+错误解决：
+Updates were rejected because the tip of your current branch is behind
+远程仓库的分支比本地的代码要新所以有冲突，要么把冲突解决掉再提交要么开新分支提交要么就直接
+git push –force（多人协作请慎重-。-）。
+git pull不行是因为修改了本地，所以远程过来的时候又会有冲突。建议多人协作的时候还是开分支好点。
+
+小结
+查看远程库信息，使用git remote -v；
+本地新建的分支如果不推送到远程，对其他人就是不可见的；
+从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+建立本地分支和远程分支的关联，使用git branch –set-upstream branch-name origin/branch-name；
+从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+
+标签管理
+命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+git tag -s <tagname> -m "blablabla..."可以用PGP签名标签；
+命令git tag可以查看所有标签。
+用命令git show <tagname>可以看到说明文字
+命令git push origin <tagname>可以推送一个本地标签；
+命令git push origin --tags可以推送全部未推送过的本地标签；
+命令git tag -d <tagname>可以删除一个本地标签；
+命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+
+
+多人协作
+
+$ git remote 查看远程
+origin
+用git remote -v显示更详细的信息：
+$ git remote -v
+origin  git@192.168.1.4:python/testxx.git (fetch)
+origin  git@192.168.1.4:python/testxx.git(push)
+
+mkdir gitxx
+cd gitxx
+1 git clone git@192.168.1.4:python/testxx.git
+2 cd testxx
+3 git branch 查看分支
+4 git checkout -b dev 创建dev分支并切换到dev分支
+5 git push origin dev 推送到远程dev分支上 远程没有dev分支 那么就会自动在远程创建一个dev分支（这是在master上操作 自己操作的话就是第一次推送dev的时候 必须有建立master仓库的权限）
+
+
+p2 操作了
+
+mkdir gitxx2
+cd gitxx2
+1 git clone git@192.168.1.4:python/testxx.git
+2 cd testxx
+3 git branch 查看分支
+4  git checkout -b dev origin/dev   在dev分支上开发，就必须创建远程origin的dev分支到本地，于是他用这个命令创建本地dev分支：
+5 vim env.txt  添加一些内容比如 hello hvag
+5 git add env.txt
+6 git commit -m 'add env'
+7 git push origin dev push到远程dev分支上
+
+p3
+mkdir gitxx2
+cd gitxx2
+1 git clone git@192.168.1.4:python/testxx.git
+2 cd testxx
+3 git branch 查看分支
+4  git checkout -b dev origin/dev   在dev分支上开发，就必须创建远程origin的dev分支到本地，于是他用这个命令创建本地dev分支：
+5 vim env.txt  添加一些内容比如 hello gavh
+5 git add env.txt
+6 git commit -m 'add new env'
+7 git push origin dev push到远程dev分支上 报错
+To 192.168.1.4:python/testxx.git
+ ! [rejected]        dev -> dev (fetch first)
+error: failed to push some refs to 'git@192.168.1.4:python/testxx.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+git pull  失败  git pull也失败了，原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接：
+git branch --set-upstream-to=origin/dev dev   在git pull
+$ git pull
+Auto-merging env.txt
+CONFLICT (add/add): Merge conflict in env.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+cat env.txt
+vim env.txt 修改冲突部分
+
+git add env.txt   你还可以新建其他的比如aa.txt 然后 git add aa.txt
+git commit -m "fix env conflict"
+git push origin dev
+
+
+
+因此，多人协作的工作模式通常是这样：
+
+首先，可以试图用git push origin <branch-name>推送自己的修改；
+
+如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+
+如果合并有冲突，则解决冲突，并在本地提交；
+
+没有冲突或者解决掉冲突后，再用git push origin <branch-name>推送就能成功！
+
+如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream-to <branch-name> origin/<branch-name>。
+
+bug分支
+
+接着p3 工作目录
+vim bb.txt   输入hi lh
+git add bb.txt
+现在必须在两个小时内修复该master的bug
+那么就要保存分支dev上的状态
+git stash   可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作  如果以前没有git add 那么直接git stash 就不会起作用 显示 No local changes to save
+git checkout master 切换到主分支上
+git checkout -b issue-101 创建并切换到分支issue-101 
+vim readme.txt  输入read me
+git add readme.txt
+git commit -m "fix bug 101"
+git checkout master
+git merge --no-ff -m "merged bug fix 101" issue-101
+git checkout dev
+git status
+git stash list
+git stash pop  恢复并删除   git stash apply恢复，但是恢复后，stash内容并不删除  git stash apply stash@{0}可以指定恢复到哪一个状态
+git stash list
+git status
+
+因为dev是从master分支出来了 master的bug dev也有 所以需要修复dev上的bug
+先git commit -m  'dev’先提交dev
+然后 git cherry-pick ce7c694   注意pick后面那个 是你提交bug修复的那个id 如下
+$ git commit -m "fix bug 101"
+[issue-101 ce7c694] fix bug 101
+ 1 file changed, 2 insertions(+)
+ create mode 100644 readme.txt
