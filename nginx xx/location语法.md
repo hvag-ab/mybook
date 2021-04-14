@@ -337,3 +337,51 @@ location / {
     proxy_pass http://tomcat:8080/
 
 }
+
+alias root proxy_pass 的区别
+
+root与alias主要区别在于nginx如何解释location后面的uri，这会使两者分别以不同的方式将请求映射到服务器文件上。
+root的处理结果是：root路径＋location路径
+alias的处理结果是：使用alias路径替换location路径
+alias是一个目录别名的定义，root则是最上层目录的定义。
+还有一个重要的区别是alias后面必须要用“/”结束，否则会找不到文件的。。。而root则可有可无~~
+
+root实例：
+
+location ^~ /t/ {
+     root /www/root/html/;
+}
+如果一个请求的URI是/t/a.html时，web服务器将会返回服务器上的**/www/root/html/t/a.html**的文件。
+
+alias实例：
+
+location ^~ /t/ {
+ alias /www/root/html/new_t/;
+}
+如果一个请求的URI是**/t/a.html时，web服务器将会返回服务器上的/www/root/html/new_t/a.html**的文件。注意这里是new_t，因为alias会把location后面配置的路径丢弃掉，把当前匹配到的目录指向到指定的目录。
+
+使用alias时，目录名后面一定要加"/"。
+alias在使用正则匹配时，必须捕捉要匹配的内容并在指定的内容处使用。
+alias只能位于location块中。（root可以不放在location中）
+
+proxy_pass实例
+
+反向代理配置，用于代理请求，适用于前后端负载分离或多台机器、服务器负载分离的场景，在匹配到location配置的URL路径后，转发请求到【proxy_pass】配置的URL，是否会附加location配置路径与【proxy_pass】配置的路径后是否有"/“有关，有”/"则不附加，如：
+
+location /test/ 
+{ 
+proxy_pass http://127.0.0.1:8080/;  # 加/
+}
+即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/1.jpg（未附加/test/路径）。
+
+location /test/ 
+{ 
+proxy_pass http://127.0.0.1:8080;  #不加/
+}
+即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/test/1.jpg（附加/test/路径）。
+
+location /test/ 
+{ 
+proxy_pass http://127.0.0.1:8080/img; 
+}
+即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/img1.jpg（未附加/test/路径，但附加了/test/之后的路径）。
