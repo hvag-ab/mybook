@@ -1,6 +1,14 @@
 1.  先测试网络能否ping通:
 
      ping 远程 IP 例如 ping 172.10.20.81
+     
+     ping不通的可能原因#
+        a) 对方关机/ip不存在
+        b) 网段不同，通过路由也无法找到
+        c) 防火墙设置，过滤了ping发出的ICMP数据包，导致无反馈，time out
+        d) Ip地址设置错误，对于多个网卡的服务器来说，每个网口的ip配置必须不能在同一个网段，否则会造成路由不知选择哪一个出口
+        e) 网线故障
+        f) 未设置网关，这个对于小网128网段，走路由器的，如果未配置将无法路由
 
 2.  如果网络能ping通表示网络连接正常，然后就要测试端口：
 
@@ -11,10 +19,20 @@
       firewall-cmd --state
       开放端口（比如开放8001）
       firewall-cmd --add-port=8001/tcp --permanent
+      firewall-cmd --permanent --add-rich-rule 'rule family=ipv4 source address=192.168.0.1/2 port port=80 protocol=tcp accept'
+      #firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="11.0.44.248" accept'
+      #firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="11.0.44.240/29" accept'  #指定了11.0.44.240-11.0.44.247 8个ip允许访问
+      #firewall-cmd --permanent --add-rich-rule='rule family="ipv4" protocol value="icmp" source  ddress="11.0.44.248" accept'  #指定了11.0.44.248 ip允许icmp ping
+      
+      #firewall-cmd --permanent --add-rich-rule='rule family="ipv4" protocol value="icmp"  source NOT address="11.0.44.240/29" reject'  #指定了11.0.44.240-11.0.44.247 8个ip允许icmp
+
+      
       firewall-cmd --reload
 
       查看开放的端口
       firewall-cmd  --list-all
+      
+      #systemctl restart firewalld  #重启firewalld服务
 
       关闭端口
       firewall-cmd --remove-port=8001/tcp --permanent
