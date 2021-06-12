@@ -1,0 +1,33 @@
+1.  先测试网络能否ping通:
+
+     ping 远程 IP 例如 ping 172.10.20.81
+
+2.  如果网络能ping通表示网络连接正常，然后就要测试端口：
+
+     telnet 远程IP 端口 telnet 172.10.20.81 8001
+
+3.  如果telnet不上，要考虑一下服务器是否有防火墙拦截：
+
+      firewall-cmd --state
+      开放端口（比如开放8001）
+      firewall-cmd --add-port=8001/tcp --permanent
+      firewall-cmd --reload
+
+      查看开放的端口
+      firewall-cmd  --list-all
+
+      关闭端口
+      firewall-cmd --remove-port=8001/tcp --permanent
+      firewall-cmd --reload
+
+
+4.   如果防火墙被拦截，需要放行端口。如果防火墙没有拦截，则要考虑服务内部是否配置限定IP访问。
+MySQL、MongoDB、Redis都有bind选项，用来限定客户端IP
+
+5.  再检查服务内部是否有其它权限设置
+
+     例如MySQL有远程访问配置
+
+     redis 保护模式是否关闭
+
+6 可以让两台服务器尝试谅解web页面如果两台如果连不上可能是第一台有问题或者是第二台如果第一台服务器能连上第二台的可能性比较大
