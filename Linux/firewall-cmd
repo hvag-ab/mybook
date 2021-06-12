@@ -1,0 +1,36 @@
+查看firewalld的状态：
+[root@lockey Desktop]# firewall-cmd --state
+查看当前活动的区域，并附带一个目前分配给它们的接口列表：
+[root@lockey Desktop]# firewall-cmd --get-active-zones
+查看默认区域：
+[root@lockey Desktop]# firewall-cmd --get-default-zone
+查看所有可用区域：
+[root@lockey Desktop]# firewall-cmd --get-zones
+列出指定域的所有设置：
+[root@lockey Desktop]# firewall-cmd --zone=public --list-all
+列出所有预设服务：
+[root@lockey Desktop]# firewall-cmd --get-services
+（这样将列出 /usr/lib/firewalld/services/ 中的服务器名称。注意：配置文件是以服务本身命名的service-name. xml）
+列出所有区域的设置：
+[root@lockey Desktop]# firewall-cmd --list-all-zones
+设置默认区域：
+[root@lockey Desktop]# firewall-cmd --set-default-zone=dmz
+设置网络地址到指定的区域：
+[root@lockey Desktop]# firewall-cmd --permanent --zone=internal --add-source=172.25.254.0/24
+（--permanent参数表示永久生效设置，如果没有指定--zone参数，那么会加入默认区域）
+删除指定区域中的网路地址：
+[root@lockey Desktop]# firewall-cmd --permanent --zone=internal --remove-source=172.25.254.0/24
+添加、改变、删除网络接口：
+[root@lockey Desktop]# firewall-cmd --permanent --zone=internal --add-interface=eth0
+[root@lockey Desktop]# firewall-cmd --permanent --zone=internal --change-interface=eth0
+[root@lockey Desktop]# firewall-cmd --permanent --zone=internal --remove-interface=eth0
+添加、删除服务：
+[root@lockey Desktop]# firewall-cmd --permanent --zone=public --add-service=smtp
+[root@lockey Desktop]# firewall-cmd --permanent --zone=public --remove-service=smtp
+列出、添加、删除端口：
+[root@lockey Desktop]# firewall-cmd --zone=public --list-ports
+[root@lockey Desktop]# firewall-cmd --permanent --zone=public --add-port=8080/tcp
+[root@lockey Desktop]# firewall-cmd --permanent --zone=public --remove-port=8080/tcp
+重载防火墙：
+[root@lockey Desktop]# firewall-cmd --reload
+(注意:这并不会中断已经建立的连接,如果打算中断,可以使用 --complete-reload选项)
