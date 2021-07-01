@@ -368,20 +368,31 @@ proxy_pass实例
 
 反向代理配置，用于代理请求，适用于前后端负载分离或多台机器、服务器负载分离的场景，在匹配到location配置的URL路径后，转发请求到【proxy_pass】配置的URL，是否会附加location配置路径与【proxy_pass】配置的路径后是否有"/“有关，有”/"则不附加，如：
 
+# 注意 location后面 是加了/ 的  /test/   不加/出现的情况不完全一样 如 /test
+1.加/
 location /test/ 
 { 
-proxy_pass http://127.0.0.1:8080/;  # 加/
+proxy_pass http://127.0.0.1:8080/; 
 }
 即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/1.jpg（未附加/test/路径）。
 
+2. 不加/
 location /test/ 
 { 
 proxy_pass http://127.0.0.1:8080;  #不加/
 }
 即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/test/1.jpg（附加/test/路径）。
 
+3.代理加额外的uri  加 /
 location /test/ 
 { 
-proxy_pass http://127.0.0.1:8080/img; 
+    proxy_pass http://127.0.0.1:8080/haha/; 
 }
-即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/img1.jpg（未附加/test/路径，但附加了/test/之后的路径）。
+即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/haha/1.jpg（未附加/test/路径，但附加了/test/之后的路径）。
+
+4.代理加额外的uri  不加 /
+location /test/ 
+{ 
+    proxy_pass http://127.0.0.1:8080/haha; 
+}
+即：请求/test/1.jpg（省略了协议与域名），将会被nginx转发请求到http://127.0.0.1:8080/haha1.jpg（附加/test/路径，也附加了/test/之后的路径）。
