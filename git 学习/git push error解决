@@ -42,3 +42,10 @@ CONFLICT (content): Merge conflict in c/environ.c
 
 最后，解决完冲突，就可以正常git提交了。
 
+
+git每次操作远程分支(git pull,git push等)时提示enter passphrase for key '~/.ssh/id_rsa' （原因是设置ssh的时候设置了密码）
+解决办法 
+$ ssh-keygen -p -P 你的密码 -N '' -f ~/.ssh/id_rsa  重置密码设置为空
+
+git push每次提交需要输入用户名密码解决办法
+git config --global credential.helper store
