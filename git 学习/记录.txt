@@ -61,6 +61,18 @@ $ git log --pretty=oneline 也可以查看版本号
 
 $ git reset --hard 1094a
 
+# 当回滚后 这时本地代码已经回退到oldVersion，这时候如果直接push到远程仓库，会提示版本冲突
+方法一 ：不解决，直接强制提交：
+1、 打开Terminal，切换到项目所在目录
+2、 执行：git push -f origin main
+
+方法二：
+1、右击项目依次选中：Git -> Repository -> Reset HEAD
+2、Reset Type: Mixed
+3、To Commit: 输入最新版本
+4、Rese确定
+这时你会发现，回到最新版本。但是代码还是回退版本的代码，这时候重push到远程仓库就不会版本冲突
+
 
 现在修改readme.txt 内容
 Git is good.
