@@ -73,6 +73,9 @@ $ git reset --hard 1094a
 4、Rese确定
 这时你会发现，回到最新版本。但是代码还是回退版本的代码，这时候重push到远程仓库就不会版本冲突
 
+git pull origin dev:main 出现! [已拒绝] dev -> main （非快进式）
+解决1 强制更新 git pull -f origin dev:main
+
 
 现在修改readme.txt 内容
 Git is good.
