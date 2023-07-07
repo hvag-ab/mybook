@@ -208,6 +208,16 @@ git clone -b 分支名称  地址
 删除分支：git branch -d <name>
 推送分支 git push origin <name> main权限就直接推送 会自动创建 否则需要在远程中建立 该分支 才能推送
 
+从远程项目clone并切换到dev分支
+1. git clone git@xxx.git  并cd 进入到项目中
+2. git branch -r 查看远程分支
+例如 origin/dev
+  origin/master
+3. git checkout -b dev oorigin/dev
+4. git branch
+5. git pull 
+显示 Already up to date.
+
 从dev分支上更新代码（整体操作路线 假设分支名叫做dev）
 
 1.首先与远程仓库建立连接：git remote add origin XX你要推送的Coding(Github地址）XX.git
