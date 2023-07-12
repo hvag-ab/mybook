@@ -217,6 +217,11 @@ git clone -b 分支名称  地址
 4. git branch
 5. git pull 
 显示 Already up to date.
+更新代码后
+git add .
+git commit -m 'xxx'
+git pull 
+git push 
 
 从dev分支上更新代码（整体操作路线 假设分支名叫做dev）
 
