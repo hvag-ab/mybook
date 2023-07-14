@@ -213,7 +213,7 @@ git clone -b 分支名称  地址
 2. git branch -r 查看远程分支
 例如 origin/dev
   origin/master
-3. git checkout -b dev oorigin/dev
+3. git checkout -b dev origin/dev
 4. git branch
 5. git pull 
 显示 Already up to date.
