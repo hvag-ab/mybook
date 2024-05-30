@@ -203,7 +203,8 @@ git clone -b 分支名称  地址
 创建分支：git branch <name>
 创建完分支后 就切换到分支上
 切换分支：git checkout <name>
-创建+切换分支：git checkout -b <name>
+检出+切换分支：git checkout -b <name>  
+checkout一个分支，会更新当前的工作空间中的文件，使其与检出分支的commit版本状况保持一致。这之后工作区中的所有变更都会被记录在checkout出来的那个分支上。这一操作可以认为是在挑选你希望修改的工作分支 一般用在修改bug 添加新功能 不影响检出前的分支 最后在合并到检出前的分支。
 合并某分支到当前分支：git merge <name>   这个name是分支名 一般是分支名 合并 到主分支上
 删除分支：git branch -d <name>
 推送分支 git push origin <name> main权限就直接推送 会自动创建 否则需要在远程中建立 该分支 才能推送
