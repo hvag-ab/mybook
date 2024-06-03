@@ -74,22 +74,6 @@ $ git reset --hard 1094a
 这时你会发现，回到最新版本。但是代码还是回退版本的代码，这时候重push到远程仓库就不会版本冲突
 
 
-现在修改readme.txt 内容
-Git is good.
-
-然后git add readme.txt
-git status -s 查看提交状态
-
-
-$ git reset HEAD readme.txt
-HEAD is now at e475afc add distributed
-
-git commit -m "重新提交"
-
-
-看看readme.txt的内容是不是版本add distributed：
-$ cat readme.txt 查看文件内容
-
 
 # 撤销
 命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
@@ -328,38 +312,22 @@ git stash drop stash@{0}
 
 功能分支 Feature
 每添加一个新功能，最好新建一个feature分支，在上面开发，完成后，合并，最后，删除该feature分支
-拉一个featur分支
-git checkout -b feature-chktype
-修改后添加、提交
-如果还没合并到dev, 删除这个feature分支时会失败
-可以使用 git branch -D 分支名 强制删除
-获取远程仓库信息
-$ git remote
-origin
-$ git remote -v 更详细的信息
-origin  https://coding.net/coderlt/testGit.git (fetch)
-origin  https://coding.net/coderlt/testGit.git (push)
-推送分支
-git push origin master
-git push origin dev
-哪些分支需要推送，哪些不需要呢？
-master分支是主分支，因此要时刻与远程同步；
-dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
-bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
-feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
 
-多人协作的工作模式通常是这样：
-首先，可以试图用git push origin branch-name推送自己的修改；
-如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
-如果合并有冲突，则解决冲突，并在本地提交；
-没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
-如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令git branch –set-upstream branch-name origin/branch-name。
-这就是多人协作的工作模式，一旦熟悉了，就非常简单。
-错误解决：
-Updates were rejected because the tip of your current branch is behind
-远程仓库的分支比本地的代码要新所以有冲突，要么把冲突解决掉再提交要么开新分支提交要么就直接
-git push –force（多人协作请慎重-。-）。
-git pull不行是因为修改了本地，所以远程过来的时候又会有冲突。建议多人协作的时候还是开分支好点。
+例:假设在dev上开发 首先冲dev检出一个feature-chktype分支
+git checkout -b feature-chktype
+然后再这个分支上开发新功能
+
+多人合作时 另一个一把新功能更新到dev上 你需要跟新新功能并合并到功能分支上
+1 首先在功能分支上 git stash 保存你分支上的新功能
+2 然后切换到dev分支上 git checkout dev
+3 git pull 拉取更新
+4 git checkout  feature-chktype 切换到功能分支上
+5 git stash pop 恢复并删除工作现场
+6 dev合并到功能分支feature-chktype上
+7 继续在功能分支上开发 开发完成后再和dev合并 然后再push到远程dev上
+8 功能分支开发完成后 git branch -D feature-chktype 强制删除功能分支
+
+
 
 标签管理
 git tag <name>就可以打一个新标签：
