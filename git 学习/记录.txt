@@ -321,9 +321,13 @@ git checkout -b feature-chktype
 1 首先在功能分支上 git stash 保存你分支上的新功能
 2 然后切换到dev分支上 git checkout dev
 3 git pull 拉取更新
-4 git checkout  feature-chktype 切换到功能分支上
-5 git stash pop 恢复并删除工作现场
-6 dev合并到功能分支feature-chktype上
+4 git checkout  feature-chktype 切换到功能分支上，
+5 合并dev到功能分支feature-chktype上
+6 git stash pop 恢复并删除工作现场；恢复的时候如果发生冲突
+  1） git status  # 查看冲突文件
+  2） # 手动解决冲突
+  3） git add <解决后的文件>  # 将解决冲突后的文件标记为已解决状态
+  4） git stash drop  # 如果不再需要这个stash
 7 继续在功能分支上开发 开发完成后再和dev合并 然后再push到远程dev上
 8 功能分支开发完成后 git branch -D feature-chktype 强制删除功能分支
 
