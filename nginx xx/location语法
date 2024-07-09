@@ -3,6 +3,7 @@ Location block 的基本语法形式是：
     location [=|~|~*|^~|@] pattern { ... }
 
 [=|~|~*|^~|@] 被称作 location modifier ，这会定义 Nginx 如何去匹配其后的 pattern ，以及该 pattern 的最基本的属性（简单字符串或正则表达式）
+被称作 location modifier 后面的uri 支持正则表示 例如 ^/abc 表示以/abc开头的  /abc$ 表示以/abc结尾
 
  
 
